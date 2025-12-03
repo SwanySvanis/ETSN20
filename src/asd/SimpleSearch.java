@@ -3,6 +3,10 @@ package asd;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SimpleSearch {
 
@@ -16,14 +20,17 @@ public class SimpleSearch {
             return;
         }
 
-        String pattern = args[1];
-        String fileName = args[2];
-
+        String patternString = "\\b" + Pattern.quote(args[1]) + "\\b"; // match whole word
+        String fileName= args[2];
+       
+        Pattern pattern = Pattern.compile(patternString);
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             int lineNumber = 1;
             while ((line = reader.readLine()) != null) {
-                if (line.contains(pattern)) {
+                Matcher matcher = pattern.matcher(line);
+
+                if (matcher.find()) {
                     System.out.println(lineNumber + ": " + line);
                 }
                 lineNumber++;
